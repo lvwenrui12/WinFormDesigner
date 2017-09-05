@@ -478,7 +478,8 @@ namespace WinFormDesigner
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "MainForm";
-            this.Text = "MainForm";
+            this.Text = "ÖÇÁª±¦×éÌ¬Èí¼þ";
+            this.WindowState = System.Windows.Forms.FormWindowState.Maximized;
             this.panel2.ResumeLayout(false);
             this.panel1.ResumeLayout(false);
             this.pnlContent.ResumeLayout(false);

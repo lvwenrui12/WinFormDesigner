@@ -35,6 +35,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DesignSurfaceExt">
+      <HintPath>lib\DesignSurfaceExt.dll</HintPath>
+    </Reference>
     <Reference Include="ICSharpCode.TextEditor, Version=2.0.0.1291, Culture=neutral, PublicKeyToken=4d61825e8dd49f1a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\ICSharpCode.TextEditor.dll</HintPath>

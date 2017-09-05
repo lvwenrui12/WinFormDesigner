@@ -16,6 +16,7 @@ using System.Collections;
 using System.IO.Ports;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
+using  DesignSurfaceExt;
 
 
 namespace WinFormDesigner
@@ -34,6 +35,8 @@ namespace WinFormDesigner
         MenuCommandService _menuCommandService;
 
         Loader.CodeDomHostLoader _CodeDomHostLoader;
+
+        DesignSurfaceExt.DesignSurfaceExt surface = new DesignSurfaceExt.DesignSurfaceExt();
 
         #region signleton
 
@@ -138,9 +141,10 @@ namespace WinFormDesigner
 
             //surface.BeginLoad(typeof(Form));
             _CodeDomHostLoader = new Loader.CodeDomHostLoader();
-            surface.BeginLoad(_CodeDomHostLoader);
+        surface.BeginLoad(_CodeDomHostLoader);
 
             Control designerContorl = (Control)surface.View;
+            designerContorl.BackColor = Color.Gainsboro;
             designerContorl.Dock = DockStyle.Fill;
             tpDesign.Controls.Add(designerContorl);//´°Ìו
 
