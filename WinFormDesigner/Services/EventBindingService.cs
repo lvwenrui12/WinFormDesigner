@@ -17,30 +17,30 @@ using System.Globalization;
 
 namespace ICSharpCode.FormsDesigner.Services
 {
-	public class EventBindingService : System.ComponentModel.Design.EventBindingService
-	{
-		
-		public EventBindingService(IServiceProvider provider) : base(provider)
-		{
-		}
+    public class EventBindingService : System.ComponentModel.Design.EventBindingService
+    {
 
-		protected override string CreateUniqueMethodName(IComponent component, EventDescriptor e)
-		{
-			return String.Format("{0}_{1}", Char.ToUpper(component.Site.Name[0]) + component.Site.Name.Substring(1), e.DisplayName);
-		}
+        public EventBindingService(IServiceProvider provider) : base(provider)
+        {
+        }
 
-		// sohuld look around in form class for compatiable methodes
-		protected override ICollection GetCompatibleMethods(EventDescriptor e)
-		{
+        protected override string CreateUniqueMethodName(IComponent component, EventDescriptor e)
+        {
+            return String.Format("{0}_{1}", Char.ToUpper(component.Site.Name[0]) + component.Site.Name.Substring(1), e.DisplayName);
+        }
+
+        // sohuld look around in form class for compatiable methodes
+        protected override ICollection GetCompatibleMethods(EventDescriptor e)
+        {
             ArrayList al = new ArrayList();
             MethodInfo methodInfo = e.EventType.GetMethod("Invoke");
             if (null != methodInfo)
                 al.Add(methodInfo.Name);
             return al;
-		}
-		
-		protected override bool ShowCode()
-		{
+        }
+
+        protected override bool ShowCode()
+        {
             //IWorkbenchWindow window = WorkbenchSingleton.Workbench.ActiveWorkbenchWindow;
             //if (window == null) {
             //    return false;
@@ -52,11 +52,11 @@ namespace ICSharpCode.FormsDesigner.Services
             //    formDesigner.ShowSourceCode();
             //    return true;
             //}
-			return false;
-		}
+            return false;
+        }
 
-		protected override bool ShowCode(int lineNumber)
-		{
+        protected override bool ShowCode(int lineNumber)
+        {
             //IWorkbenchWindow window = WorkbenchSingleton.Workbench.ActiveWorkbenchWindow;
             //if (window == null) {
             //    return false;
@@ -68,15 +68,15 @@ namespace ICSharpCode.FormsDesigner.Services
             //    formDesigner.ShowSourceCode(lineNumber);
             //    return true;
             //}
-			return false;
-		}
+            return false;
+        }
 
-		protected override bool ShowCode(IComponent component, EventDescriptor edesc, string methodName)
-		{
+        protected override bool ShowCode(IComponent component, EventDescriptor edesc, string methodName)
+        {
             System.Windows.Forms.MessageBox.Show("to add:" + component.Site.Name + "\r\n" + methodName);
+            return false;
+        }
 
-			return false;
-		}
 
-	}
+    }
 }

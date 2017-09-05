@@ -13,6 +13,7 @@ using System.ComponentModel.Design;
 using System.Drawing.Design;
 using System.Reflection;
 using System.Collections;
+using System.IO.Ports;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
 
@@ -66,8 +67,7 @@ namespace WinFormDesigner
             ComponentLibraryLoader componentLibraryLoader = new ComponentLibraryLoader();
             componentLibraryLoader.LoadToolComponentLibrary(fileName);
 
-            Guanjinke.Windows.Forms.ToolBox toolBox = new Guanjinke.Windows.Forms.ToolBox();
-            toolBox.Dock = DockStyle.Fill;
+            Guanjinke.Windows.Forms.ToolBox toolBox = new Guanjinke.Windows.Forms.ToolBox {Dock = DockStyle.Fill};
 
             foreach (Category category in componentLibraryLoader.Categories)
             {
@@ -129,7 +129,10 @@ namespace WinFormDesigner
             serviceContainer.AddService(typeof(IToolboxService), _toolboxService);
 
             DesignSurface surface = new DesignSurface(serviceContainer);
+            //serviceContainer.AddService(typeof(System.ComponentModel.Design.IEventBindingService), new ICSharpCode.FormsDesigner.Services.EventBindingService(surface));
+
             serviceContainer.AddService(typeof(System.ComponentModel.Design.IEventBindingService), new ICSharpCode.FormsDesigner.Services.EventBindingService(surface));
+
             _menuCommandService = new MenuCommandService(surface);
             serviceContainer.AddService(typeof(IMenuCommandService), _menuCommandService);
 
@@ -161,7 +164,7 @@ namespace WinFormDesigner
             #region 事件响应
 
             // 选中项改变时的事件
-            _selectionService = surface.GetService(typeof(ISelectionService)) as ISelectionService;
+            _selectionService = surface.GetService(typeof(ISelectionService)) as ISelectionService;//获取surface中的SelectionService
             _selectionService.SelectionChanged += new EventHandler(selectionService_SelectionChanged);
 
             // 增/删/重命名组件的事件
@@ -216,6 +219,15 @@ namespace WinFormDesigner
             cmbControls.DrawMode = DrawMode.OwnerDrawFixed;
             cmbControls.DrawItem += new DrawItemEventHandler(cmbControls_DrawItem);
             UpdateComboBox();
+
+            #region 串口加载
+
+            foreach (string com in System.IO.Ports.SerialPort.GetPortNames())
+            {
+                this.comPortName.Items.Add(com);
+            }
+
+            #endregion
         }
 
         void selectionService_SelectionChanged(object sender, EventArgs e)
@@ -413,7 +425,12 @@ namespace WinFormDesigner
             if (tabContent.SelectedIndex == 1)
             {
                 _textEditor.Text = _CodeDomHostLoader.GetCode(Strings.CS);
+            }else if (tabContent.SelectedIndex==2)
+            {
+              
             }
+
+
         } 
         #endregion
 
@@ -426,8 +443,60 @@ namespace WinFormDesigner
             public const string CS = "C#";
             public const string JS = "J#";
             public const string VB = "VB";
-        } 
+        }
+
         #endregion
 
+
+        #region 打开串口
+        private void btnOpenCom_Click(object sender, EventArgs e)
+        {
+
+            try
+            {
+                if (this.serialPort1.IsOpen)
+                {
+                    this.serialPort1.Close();
+                }
+                else
+                {
+                    // 设置端口参数
+                    this.serialPort1.BaudRate = int.Parse(this.comBaudRate.Text);
+                    this.serialPort1.DataBits = int.Parse(this.comDataBit.Text);
+                    this.serialPort1.StopBits = (StopBits)Enum.Parse(typeof(StopBits), this.comStopBit.Text);
+                    this.serialPort1.Parity = (Parity)Enum.Parse(typeof(Parity), this.comParity.Text);
+                    this.serialPort1.PortName = this.comPortName.Text;
+                    //comport.Encoding = Encoding.ASCII;
+
+                    //打开端口
+                    this.serialPort1.Open();
+                }
+                this.groupBox1.Enabled = !this.serialPort1.IsOpen;
+                //txtsend.Enabled = btnsend.Enabled = comport.IsOpen;
+
+                if (this.serialPort1.IsOpen)
+                {
+                    this.btnOpenCom.Text = "&C关闭端口";
+                }
+                else
+                {
+                    this.btnOpenCom.Text = "&O打开端口";
+                }
+                //if (this.serialPort1.IsOpen) txtsend.Focus();
+            }
+            catch (Exception er)
+            {
+                MessageBox.Show("端口打开失败！" + er.Message, "提示");
+            }
+
+        }
+        #endregion
+
+        #region 下载代码到触摸屏
+        private void btnDownLoad_Click(object sender, EventArgs e)
+        {
+
+        } 
+        #endregion
     }
 }
