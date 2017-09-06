@@ -35,6 +35,7 @@ namespace WinFormDesigner
         MenuCommandService _menuCommandService;
 
         Loader.CodeDomHostLoader _CodeDomHostLoader;
+        private Form rootComponent = null;
 
         //DesignSurfaceExt.DesignSurfaceExt surface = new DesignSurfaceExt.DesignSurfaceExt();
 
@@ -149,9 +150,10 @@ namespace WinFormDesigner
             designerContorl.BackColor = Color.Aqua;
             designerContorl.Dock = DockStyle.Fill;
             //获取root组件
-            Form rootComponent =(Form) ((IDesignerHost)this._host).RootComponent;
+            rootComponent = (Form) ((IDesignerHost)this._host).RootComponent;
 
             rootComponent.FormBorderStyle = FormBorderStyle.None;
+         
 
             #region 初始化窗体大小
 
@@ -520,8 +522,55 @@ namespace WinFormDesigner
         #region 下载代码到触摸屏
         private void btnDownLoad_Click(object sender, EventArgs e)
         {
+            #region 获取控件
 
-        } 
+            if (null!= rootComponent )
+            {
+                if (rootComponent.Controls.Count>0)
+                {
+                    foreach (Control control in rootComponent.Controls)
+                    {
+                        ComponentGroup(control);
+                    }
+                }
+               
+ 
+            }
+
+            #endregion
+
+
+        }
         #endregion
+
+        #region 控件归类
+        private  List<Button> btnList=new List<Button>();
+        private List<TextBox> txtList = new List<TextBox>();
+     
+
+
+        private void ComponentGroup(Control ctr)
+        {
+
+            #region Button
+
+            if (ctr is Button)
+            {
+               btnList.Add((Button)ctr);
+            }
+            if (ctr is TextBox)
+            {
+                txtList.Add((TextBox)ctr);
+            }
+
+            #endregion
+
+        }
+
+
+
+        #endregion
+
+#
     }
 }
