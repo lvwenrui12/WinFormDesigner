@@ -36,7 +36,7 @@ namespace WinFormDesigner
 
         Loader.CodeDomHostLoader _CodeDomHostLoader;
 
-        DesignSurfaceExt.DesignSurfaceExt surface = new DesignSurfaceExt.DesignSurfaceExt();
+        //DesignSurfaceExt.DesignSurfaceExt surface = new DesignSurfaceExt.DesignSurfaceExt();
 
         #region signleton
 
@@ -132,7 +132,7 @@ namespace WinFormDesigner
             serviceContainer.AddService(typeof(IToolboxService), _toolboxService);
 
             DesignSurface surface = new DesignSurface(serviceContainer);
-            //serviceContainer.AddService(typeof(System.ComponentModel.Design.IEventBindingService), new ICSharpCode.FormsDesigner.Services.EventBindingService(surface));
+            _host = (IDesignerHost)surface.GetService(typeof(IDesignerHost));
 
             serviceContainer.AddService(typeof(System.ComponentModel.Design.IEventBindingService), new ICSharpCode.FormsDesigner.Services.EventBindingService(surface));
 
@@ -141,12 +141,30 @@ namespace WinFormDesigner
 
             //surface.BeginLoad(typeof(Form));
             _CodeDomHostLoader = new Loader.CodeDomHostLoader();
-        surface.BeginLoad(_CodeDomHostLoader);
+            surface.BeginLoad(_CodeDomHostLoader);
 
-            Control designerContorl = (Control)surface.View;
-            designerContorl.BackColor = Color.Gainsboro;
+            Control designerContorl =(Control) surface.View;
+
+
+            designerContorl.BackColor = Color.Aqua;
             designerContorl.Dock = DockStyle.Fill;
+            //获取root组件
+            Form rootComponent =(Form) ((IDesignerHost)this._host).RootComponent;
+
+            rootComponent.FormBorderStyle = FormBorderStyle.None;
+
+            #region 初始化窗体大小
+
+            //- set the Size
+            PropertyDescriptorCollection pdc = TypeDescriptor.GetProperties(designerContorl);
+            //- Sets a PropertyDescriptor to the specific property.
+            PropertyDescriptor pdS = pdc.Find("Size", false);
+            if (null != pdS)
+                pdS.SetValue(_host.RootComponent, new Size(800, 480));
+            #endregion
+            
             tpDesign.Controls.Add(designerContorl);//窗体
+          
 
             _textEditor = new TextEditorControl
             {
@@ -161,7 +179,7 @@ namespace WinFormDesigner
             _propertyGrid.SelectedObject = surface.ComponentContainer.Components[0];
             SetAlignMenuEnabled(false);
 
-            _host = (IDesignerHost)surface.GetService(typeof(IDesignerHost));
+         
             _propertyGrid.Site = (new IDEContainer(_host)).CreateSite(_propertyGrid);
             _propertyGrid.PropertyTabs.AddTabType(typeof(System.Windows.Forms.Design.EventsTab), PropertyTabScope.Document);
 
@@ -259,6 +277,8 @@ namespace WinFormDesigner
                 _ShouldUpdateSelectableObjects = false;
             }
         }
+
+        #region 更新控件下拉框
         /// <summary>
         /// 更新控件下拉框
         /// </summary>
@@ -275,7 +295,8 @@ namespace WinFormDesigner
 
             selectionService_SelectionChanged(null, null);
             inUpdate = false;
-        }
+        } 
+        #endregion
         void SelectedObjectsChanged()
         {
             inUpdate = true;

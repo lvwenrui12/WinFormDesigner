@@ -65,10 +65,15 @@ namespace Loader
 
             DesignSurface ds = new DesignSurface();
             ds.BeginLoad(typeof(Form));
-            IDesignerHost idh = (IDesignerHost)ds.GetService(typeof(IDesignerHost));
-           
+
+
+
+		    IDesignerHost idh = (IDesignerHost)ds.GetService(typeof(IDesignerHost));
+
+
             idh.RootComponent.Site.Name = "Form1";
-          
+
+
 
             cg = new CodeGen();
             ccu = cg.GetCodeCompileUnit(idh);

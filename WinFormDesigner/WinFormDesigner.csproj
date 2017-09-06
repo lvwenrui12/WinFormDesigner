@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="DesignSurfaceExt">
-      <HintPath>lib\DesignSurfaceExt.dll</HintPath>
-    </Reference>
     <Reference Include="ICSharpCode.TextEditor, Version=2.0.0.1291, Culture=neutral, PublicKeyToken=4d61825e8dd49f1a, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\Lib\ICSharpCode.TextEditor.dll</HintPath>
@@ -94,6 +91,10 @@
     <Compile Include="Services\CustomToolboxService.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DesignSurfaceExt\DesignSurfaceExt.csproj">
+      <Project>{e96c74ba-9f74-4289-bf72-45cad472d3d2}</Project>
+      <Name>DesignSurfaceExt</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Guanjinke.Windows.Forms\ToolBox.csproj">
       <Project>{77042675-7462-4B9C-9BB2-6816A0F3A904}</Project>
       <Name>ToolBox</Name>
