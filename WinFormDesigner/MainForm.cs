@@ -16,7 +16,7 @@ using System.Collections;
 using System.IO.Ports;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
-using  DesignSurfaceExt;
+using DesignSurfaceExt;
 
 
 namespace WinFormDesigner
@@ -71,7 +71,7 @@ namespace WinFormDesigner
             ComponentLibraryLoader componentLibraryLoader = new ComponentLibraryLoader();
             componentLibraryLoader.LoadToolComponentLibrary(fileName);
 
-            Guanjinke.Windows.Forms.ToolBox toolBox = new Guanjinke.Windows.Forms.ToolBox {Dock = DockStyle.Fill};
+            Guanjinke.Windows.Forms.ToolBox toolBox = new Guanjinke.Windows.Forms.ToolBox { Dock = DockStyle.Fill };
 
             foreach (Category category in componentLibraryLoader.Categories)
             {
@@ -118,7 +118,7 @@ namespace WinFormDesigner
 
             #region 添加PropertyPad
 
-            _propertyGrid = new PropertyGrid {Dock = DockStyle.Fill};
+            _propertyGrid = new PropertyGrid { Dock = DockStyle.Fill };
             pnlPropertyGrid.Controls.Add(_propertyGrid);//右边属性表
 
             #endregion
@@ -144,16 +144,16 @@ namespace WinFormDesigner
             _CodeDomHostLoader = new Loader.CodeDomHostLoader();
             surface.BeginLoad(_CodeDomHostLoader);
 
-            Control designerContorl =(Control) surface.View;
+            Control designerContorl = (Control)surface.View;
 
 
             designerContorl.BackColor = Color.Aqua;
             designerContorl.Dock = DockStyle.Fill;
             //获取root组件
-            rootComponent = (Form) ((IDesignerHost)this._host).RootComponent;
+            rootComponent = (Form)((IDesignerHost)this._host).RootComponent;
 
             rootComponent.FormBorderStyle = FormBorderStyle.None;
-         
+
 
             #region 初始化窗体大小
 
@@ -164,15 +164,15 @@ namespace WinFormDesigner
             if (null != pdS)
                 pdS.SetValue(_host.RootComponent, new Size(800, 480));
             #endregion
-            
+
             tpDesign.Controls.Add(designerContorl);//窗体
-          
+
 
             _textEditor = new TextEditorControl
             {
                 IsReadOnly = true,
                 Dock = DockStyle.Fill,
-                Document = {HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategy("C#")}
+                Document = { HighlightingStrategy = HighlightingStrategyFactory.CreateHighlightingStrategy("C#") }
             }; //代码编辑器
             tpCode.Controls.Add(_textEditor);
 
@@ -181,7 +181,7 @@ namespace WinFormDesigner
             _propertyGrid.SelectedObject = surface.ComponentContainer.Components[0];
             SetAlignMenuEnabled(false);
 
-         
+
             _propertyGrid.Site = (new IDEContainer(_host)).CreateSite(_propertyGrid);
             _propertyGrid.PropertyTabs.AddTabType(typeof(System.Windows.Forms.Design.EventsTab), PropertyTabScope.Document);
 
@@ -199,13 +199,13 @@ namespace WinFormDesigner
             _host.TransactionClosed += new DesignerTransactionCloseEventHandler(TransactionClosed);
 
             // 选中不同的工具条项目
-            toolBox.SelectedItemChanged += delegate(object sender, Guanjinke.Windows.Forms.ToolBoxItem newItem)
+            toolBox.SelectedItemChanged += delegate (object sender, Guanjinke.Windows.Forms.ToolBoxItem newItem)
             {
                 _toolboxService.SetSelectedToolboxItem(newItem.Tag as System.Drawing.Design.ToolboxItem);
             };
 
             // 双击工具栏项目时增加到设计器中
-            toolBox.ItemDoubleClicked += delegate(object sender, Guanjinke.Windows.Forms.ToolBoxItem newItem)
+            toolBox.ItemDoubleClicked += delegate (object sender, Guanjinke.Windows.Forms.ToolBoxItem newItem)
             {
                 System.Drawing.Design.ToolboxItem toolboxItem = newItem.Tag as System.Drawing.Design.ToolboxItem;
                 if (null != toolboxItem)
@@ -214,11 +214,11 @@ namespace WinFormDesigner
                     if (null != toolboxUser)
                         toolboxUser.ToolPicked(toolboxItem);
                 }
-                    
+
             };
 
             // 拖动工具栏项目的支持代码
-            toolBox.ItemDragStart += delegate(object sender, Guanjinke.Windows.Forms.ToolBoxItem newItem)
+            toolBox.ItemDragStart += delegate (object sender, Guanjinke.Windows.Forms.ToolBoxItem newItem)
             {
                 System.Drawing.Design.ToolboxItem toolboxItem = newItem.Tag as System.Drawing.Design.ToolboxItem;
                 if (null != toolboxItem)
@@ -297,7 +297,7 @@ namespace WinFormDesigner
 
             selectionService_SelectionChanged(null, null);
             inUpdate = false;
-        } 
+        }
         #endregion
         void SelectedObjectsChanged()
         {
@@ -359,7 +359,7 @@ namespace WinFormDesigner
             int iCount = _host.Container.Components.Count;
             if (iCount <= 1)
                 return;
-            
+
             _menuCommandService.GlobalInvoke(StandardCommands.SelectAll);
         }
 
@@ -452,13 +452,14 @@ namespace WinFormDesigner
             if (tabContent.SelectedIndex == 1)
             {
                 _textEditor.Text = _CodeDomHostLoader.GetCode(Strings.CS);
-            }else if (tabContent.SelectedIndex==2)
+            }
+            else if (tabContent.SelectedIndex == 2)
             {
-              
+
             }
 
 
-        } 
+        }
         #endregion
 
         #region 后台编译成什么样的语言代码
@@ -524,17 +525,17 @@ namespace WinFormDesigner
         {
             #region 获取控件
 
-            if (null!= rootComponent )
+            if (null != rootComponent)
             {
-                if (rootComponent.Controls.Count>0)
+                if (rootComponent.Controls.Count > 0)
                 {
                     foreach (Control control in rootComponent.Controls)
                     {
                         ComponentGroup(control);
                     }
                 }
-               
- 
+
+
             }
 
             #endregion
@@ -544,9 +545,9 @@ namespace WinFormDesigner
         #endregion
 
         #region 控件归类
-        private  List<Button> btnList=new List<Button>();
-        private List<TextBox> txtList = new List<TextBox>();
-     
+
+        private List<byte[]> btnByteList = new List<byte[]>();
+
 
 
         private void ComponentGroup(Control ctr)
@@ -556,11 +557,27 @@ namespace WinFormDesigner
 
             if (ctr is Button)
             {
-               btnList.Add((Button)ctr);
+                Button btn = ctr as Button;
+
+                int wid = btn.Width;
+
+                byte wid0 = Convert.ToByte((wid / 0x100) & 0xff);
+                byte wid1 = Convert.ToByte(wid & 0xff); //低位
+
+                byte height0 = Convert.ToByte((btn.Height / 0x100) & 0xff);
+                byte height1 = Convert.ToByte(btn.Height & 0xff); //低位
+
+                byte x0 = Convert.ToByte((btn.Location.X / 0x100) & 0xff);
+                byte x1 = Convert.ToByte(btn.Location.X & 0xff); //低位
+
+                byte[] btnText = Encoding.GetEncoding("GB2312").GetBytes(btn.Text);
+
+
+
             }
             if (ctr is TextBox)
             {
-                txtList.Add((TextBox)ctr);
+
             }
 
             #endregion
@@ -571,6 +588,6 @@ namespace WinFormDesigner
 
         #endregion
 
-#
+
     }
 }
