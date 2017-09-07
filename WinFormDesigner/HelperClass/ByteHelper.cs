@@ -11,27 +11,36 @@ namespace HelperClass
 
         public static byte[] MergerArray(byte[] First, byte[] Second)
         {
-            byte[] result = {};
+            byte[] result = new byte[First.Length + Second.Length];
             First.CopyTo(result, 0);
-            Second.CopyTo(result, result.Length);
+            Second.CopyTo(result, First.Length);
             return result;
         }
 
         public static byte[] MergerArray(byte[] First, byte[] Second,byte[] Third)
         {
-            byte[] result = {};
-            First.CopyTo(result, result.Length);
-            Second.CopyTo(result, result.Length);
-            Third.CopyTo(result, result.Length);
+            byte[] result = new byte[First.Length + Second.Length+Third.Length];
+            First.CopyTo(result, 0);
+            Second.CopyTo(result, First.Length);
+            Third.CopyTo(result, First.Length + Second.Length);
             return result;
         }
 
         public static byte[] MergerArray(List<byte[]> byteList)
         {
-            byte[] result = {};
+            int length = 0;
             foreach (var item in byteList)
             {
-                item.CopyTo(result,result.Length);
+                length += item.Length;
+            }
+
+            byte[] result = new byte[length];
+            length = 0;
+            foreach (var item in byteList)
+            {
+                
+                item.CopyTo(result, length);
+                length += item.Length;
             }
             return result;
             

@@ -536,7 +536,7 @@ namespace WinFormDesigner
                     }
                 }
 
-                if (btnPara.Length>0)
+                if (null!= btnPara&&btnPara.Length>0)
                 {
                     if (this.serialPort1.IsOpen)
                     {
