@@ -5,7 +5,7 @@ using System.Reflection;
 using System.Collections;
 using System.Xml;
 
-namespace ICSharpCode.FormsDesigner.Gui
+namespace HelperClass
 {
 	public class ToolComponent
 	{

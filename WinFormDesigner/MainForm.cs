@@ -7,7 +7,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Xml;
 
-using ICSharpCode.FormsDesigner.Gui;
+using ICSharpCode.FormsDesigner;
 using ICSharpCode.FormsDesigner.Services;
 using System.ComponentModel.Design;
 using System.Drawing.Design;
@@ -17,6 +17,7 @@ using System.IO.Ports;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
 using DesignSurfaceExt;
+using HelperClass;
 
 
 namespace WinFormDesigner
@@ -535,6 +536,18 @@ namespace WinFormDesigner
                     }
                 }
 
+                if (btnPara.Length>0)
+                {
+                    if (this.serialPort1.IsOpen)
+                    {
+                        serialPort1.Write(btnPara, 0, btnPara.Length);
+                    }
+                    else
+                    {
+                        MessageBox.Show("端口尚未打开");
+                    }
+                }
+
 
             }
 
@@ -544,9 +557,10 @@ namespace WinFormDesigner
         }
         #endregion
 
-        #region 控件归类
+        #region 控件归类,转换成byte数组
 
-        private List<byte[]> btnByteList = new List<byte[]>();
+        private List<byte[]> btnByteList;
+        private byte [] btnPara=null;
 
 
 
@@ -557,6 +571,7 @@ namespace WinFormDesigner
 
             if (ctr is Button)
             {
+                btnByteList=new List<byte[]>();
                 Button btn = ctr as Button;
 
                 int wid = btn.Width;
@@ -570,10 +585,23 @@ namespace WinFormDesigner
                 byte x0 = Convert.ToByte((btn.Location.X / 0x100) & 0xff);
                 byte x1 = Convert.ToByte(btn.Location.X & 0xff); //低位
 
+                byte y0 = Convert.ToByte((btn.Location.Y / 0x100) & 0xff);
+                byte y1 = Convert.ToByte(btn.Location.Y & 0xff); //低位
+
                 byte[] btnText = Encoding.GetEncoding("GB2312").GetBytes(btn.Text);
 
+                byte colorR = Convert.ToByte(btn.ForeColor.R);
+                byte colorG = Convert.ToByte(btn.ForeColor.G);
+                byte colorB = Convert.ToByte(btn.ForeColor.B);
+                byte[] foreColor = { colorR , colorG ,colorB };
 
-
+                byte[] btnParaByte = { wid0, wid1, height0, height1, x0, x1, y0, y1 };
+                
+                btnByteList.Add(btnParaByte);
+                btnByteList.Add(btnText);
+                btnByteList.Add(foreColor);
+                btnPara = ByteHelper.MergerArray(btnByteList);
+                
             }
             if (ctr is TextBox)
             {

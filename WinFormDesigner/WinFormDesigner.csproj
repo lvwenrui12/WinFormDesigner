@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HelperClass\ByteHelper.cs" />
     <Compile Include="HelperClass\ComponentLibraryLoader.cs" />
     <Compile Include="HelperClass\IDEContainer.cs" />
     <Compile Include="Loader\CodeDomHostLoader.cs" />

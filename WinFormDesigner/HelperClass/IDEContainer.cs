@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.ComponentModel;
 
-namespace WinFormDesigner
+namespace HelperClass
 {
     class IDEContainer : Container
     {
