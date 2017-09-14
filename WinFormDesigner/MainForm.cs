@@ -14,10 +14,13 @@ using System.Drawing.Design;
 using System.Reflection;
 using System.Collections;
 using System.IO.Ports;
+using System.Threading;
 using ICSharpCode.TextEditor;
 using ICSharpCode.TextEditor.Document;
 using DesignSurfaceExt;
 using HelperClass;
+using WinFormDesigner.Components;
+using IComponent = System.ComponentModel.IComponent;
 
 
 namespace WinFormDesigner
@@ -250,6 +253,12 @@ namespace WinFormDesigner
             foreach (string com in System.IO.Ports.SerialPort.GetPortNames())
             {
                 this.comPortName.Items.Add(com);
+            }
+            comParity.SelectedIndex = 0;
+            if (comPortName.Items.Count>0)
+            {
+                comPortName.SelectedIndex = 0;
+
             }
 
             #endregion
@@ -505,11 +514,13 @@ namespace WinFormDesigner
 
                 if (this.serialPort1.IsOpen)
                 {
-                    this.btnOpenCom.Text = "&C关闭端口";
+                    this.btnOpenCom.Text = "关闭端口";
+                    btnDownLoad.Enabled = true;
                 }
                 else
                 {
-                    this.btnOpenCom.Text = "&O打开端口";
+                    btnDownLoad.Enabled = false;
+                    this.btnOpenCom.Text = "打开端口";
                 }
                 //if (this.serialPort1.IsOpen) txtsend.Focus();
             }
@@ -521,9 +532,14 @@ namespace WinFormDesigner
         }
         #endregion
 
+        private string strSendByte = "";
+        private string strRece = "";
         #region 下载代码到触摸屏
         private void btnDownLoad_Click(object sender, EventArgs e)
         {
+
+            strSendByte = "";
+            strRece = "";
             #region 获取控件
 
             if (null != rootComponent)
@@ -535,19 +551,13 @@ namespace WinFormDesigner
                         ComponentGroup(control);
                     }
                 }
+                WriteByrteToCom(btnByteList);
 
-                if (null!= btnPara&&btnPara.Length>0)
-                {
-                    if (this.serialPort1.IsOpen)
-                    {
-                        serialPort1.Write(btnPara, 0, btnPara.Length);
-                    }
-                    else
-                    {
-                        MessageBox.Show("端口尚未打开");
-                    }
-                }
 
+
+                WriteByrteToCom(textByteList);
+                txtSendCmd.Text = strSendByte;
+                txtReceive.Text = strRece;
 
             }
 
@@ -557,10 +567,43 @@ namespace WinFormDesigner
         }
         #endregion
 
+        private void WriteByrteToCom(List<byte[]> list)
+        {
+            if (list != null && list.Count > 0)
+            {
+                foreach (var item in list)
+                {
+                    if (null != item && item.Length > 0)
+                    {
+                        if (this.serialPort1.IsOpen)
+                        {
+                            serialPort1.Write(item, 0, item.Length);
+                            Thread.Sleep(100);
+                            byte[] byteToRead = new byte[serialPort1.BytesToRead];
+                            serialPort1.Read(byteToRead, 0, byteToRead.Length);
+                            if (byteToRead != null && byteToRead.Length > 0)
+                            {
+                                strRece += (Encoding.ASCII.GetString(byteToRead));
+                            }
+                        }
+                        else
+                        {
+                            MessageBox.Show("端口尚未打开");
+                        }
+                    }
+                }
+            }
+
+
+        }
+
         #region 控件归类,转换成byte数组
 
-        private List<byte[]> btnByteList;
-        private byte [] btnPara=null;
+        private List<byte[]> btnByteList=new List<byte[]>();
+     
+
+        private List<byte[]> textByteList;
+        private byte[] textPara = null;
 
 
 
@@ -571,44 +614,29 @@ namespace WinFormDesigner
 
             if (ctr is Button)
             {
-                btnByteList=new List<byte[]>();
-                Button btn = ctr as Button;
+                Btn btn = new Btn((Button)ctr);
 
-                int wid = btn.Width;
+                byte[] btnPara = btn.ParaToByte();
+                    btnByteList.Add(btnPara);
+                    strSendByte += ByteHelper.ByteToString(btnPara);
+              
+            
 
-                byte wid0 = Convert.ToByte((wid / 0x100) & 0xff);
-                byte wid1 = Convert.ToByte(wid & 0xff); //低位
-
-                byte height0 = Convert.ToByte((btn.Height / 0x100) & 0xff);
-                byte height1 = Convert.ToByte(btn.Height & 0xff); //低位
-
-                byte x0 = Convert.ToByte((btn.Location.X / 0x100) & 0xff);
-                byte x1 = Convert.ToByte(btn.Location.X & 0xff); //低位
-
-                byte y0 = Convert.ToByte((btn.Location.Y / 0x100) & 0xff);
-                byte y1 = Convert.ToByte(btn.Location.Y & 0xff); //低位
-
-                byte[] btnText = Encoding.GetEncoding("GB2312").GetBytes(btn.Text);
-
-                byte colorR = Convert.ToByte(btn.ForeColor.R);
-                byte colorG = Convert.ToByte(btn.ForeColor.G);
-                byte colorB = Convert.ToByte(btn.ForeColor.B);
-                byte[] foreColor = { colorR , colorG ,colorB };
-
-                byte[] btnParaByte = { wid0, wid1, height0, height1, x0, x1, y0, y1 };
-                
-                btnByteList.Add(btnParaByte);
-                btnByteList.Add(btnText);
-                btnByteList.Add(foreColor);
-                btnPara = ByteHelper.MergerArray(btnByteList);
-                
             }
+            #endregion
+
+            #region textBox
             if (ctr is TextBox)
             {
+                TxtBox txtBox = new TxtBox((TextBox)ctr);
+
+                textByteList.Add(txtBox.ParaToByte());
+                strSendByte += ByteHelper.ByteToString(textPara);
 
             }
-
             #endregion
+
+
 
         }
 

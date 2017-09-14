@@ -41,6 +41,10 @@ namespace WinFormDesigner
             this.tpDesign = new System.Windows.Forms.TabPage();
             this.tpCode = new System.Windows.Forms.TabPage();
             this.tPCom = new System.Windows.Forms.TabPage();
+            this.label10 = new System.Windows.Forms.Label();
+            this.txtSendCmd = new System.Windows.Forms.TextBox();
+            this.txtReceive = new System.Windows.Forms.TextBox();
+            this.label9 = new System.Windows.Forms.Label();
             this.btnDownLoad = new System.Windows.Forms.Button();
             this.btnOpenCom = new System.Windows.Forms.Button();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -188,6 +192,10 @@ namespace WinFormDesigner
             // 
             // tPCom
             // 
+            this.tPCom.Controls.Add(this.label10);
+            this.tPCom.Controls.Add(this.txtSendCmd);
+            this.tPCom.Controls.Add(this.txtReceive);
+            this.tPCom.Controls.Add(this.label9);
             this.tPCom.Controls.Add(this.btnDownLoad);
             this.tPCom.Controls.Add(this.btnOpenCom);
             this.tPCom.Controls.Add(this.groupBox1);
@@ -199,9 +207,44 @@ namespace WinFormDesigner
             this.tPCom.Text = "串口下载";
             this.tPCom.UseVisualStyleBackColor = true;
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(20, 133);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(65, 12);
+            this.label10.TabIndex = 16;
+            this.label10.Text = "发送的指令";
+            // 
+            // txtSendCmd
+            // 
+            this.txtSendCmd.Location = new System.Drawing.Point(6, 157);
+            this.txtSendCmd.Multiline = true;
+            this.txtSendCmd.Name = "txtSendCmd";
+            this.txtSendCmd.Size = new System.Drawing.Size(377, 78);
+            this.txtSendCmd.TabIndex = 15;
+            // 
+            // txtReceive
+            // 
+            this.txtReceive.Location = new System.Drawing.Point(6, 288);
+            this.txtReceive.Multiline = true;
+            this.txtReceive.Name = "txtReceive";
+            this.txtReceive.Size = new System.Drawing.Size(377, 93);
+            this.txtReceive.TabIndex = 14;
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(20, 257);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(53, 12);
+            this.label9.TabIndex = 13;
+            this.label9.Text = "接收结果";
+            // 
             // btnDownLoad
             // 
-            this.btnDownLoad.Location = new System.Drawing.Point(229, 169);
+            this.btnDownLoad.Enabled = false;
+            this.btnDownLoad.Location = new System.Drawing.Point(399, 149);
             this.btnDownLoad.Name = "btnDownLoad";
             this.btnDownLoad.Size = new System.Drawing.Size(75, 34);
             this.btnDownLoad.TabIndex = 3;
@@ -211,7 +254,7 @@ namespace WinFormDesigner
             // 
             // btnOpenCom
             // 
-            this.btnOpenCom.Location = new System.Drawing.Point(118, 169);
+            this.btnOpenCom.Location = new System.Drawing.Point(399, 73);
             this.btnOpenCom.Name = "btnOpenCom";
             this.btnOpenCom.Size = new System.Drawing.Size(79, 34);
             this.btnOpenCom.TabIndex = 2;
@@ -233,7 +276,7 @@ namespace WinFormDesigner
             this.groupBox1.Controls.Add(this.comPortName);
             this.groupBox1.Location = new System.Drawing.Point(6, 19);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(421, 100);
+            this.groupBox1.Size = new System.Drawing.Size(377, 100);
             this.groupBox1.TabIndex = 1;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "端口设置";
@@ -241,7 +284,7 @@ namespace WinFormDesigner
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(312, 26);
+            this.label5.Location = new System.Drawing.Point(303, 27);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(53, 12);
             this.label5.TabIndex = 1;
@@ -250,7 +293,7 @@ namespace WinFormDesigner
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(239, 26);
+            this.label4.Location = new System.Drawing.Point(230, 27);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(41, 12);
             this.label4.TabIndex = 1;
@@ -259,7 +302,7 @@ namespace WinFormDesigner
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(171, 26);
+            this.label3.Location = new System.Drawing.Point(162, 27);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(41, 12);
             this.label3.TabIndex = 1;
@@ -268,7 +311,7 @@ namespace WinFormDesigner
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(101, 26);
+            this.label2.Location = new System.Drawing.Point(92, 27);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(41, 12);
             this.label2.TabIndex = 1;
@@ -277,7 +320,7 @@ namespace WinFormDesigner
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(23, 26);
+            this.label1.Location = new System.Drawing.Point(14, 27);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 12);
             this.label1.TabIndex = 1;
@@ -290,7 +333,7 @@ namespace WinFormDesigner
             "None",
             "Even",
             "Odd"});
-            this.comParity.Location = new System.Drawing.Point(314, 54);
+            this.comParity.Location = new System.Drawing.Point(305, 55);
             this.comParity.Name = "comParity";
             this.comParity.Size = new System.Drawing.Size(57, 20);
             this.comParity.TabIndex = 0;
@@ -303,7 +346,7 @@ namespace WinFormDesigner
             "1",
             "2",
             "3"});
-            this.comStopBit.Location = new System.Drawing.Point(241, 54);
+            this.comStopBit.Location = new System.Drawing.Point(232, 55);
             this.comStopBit.Name = "comStopBit";
             this.comStopBit.Size = new System.Drawing.Size(57, 20);
             this.comStopBit.TabIndex = 0;
@@ -316,7 +359,7 @@ namespace WinFormDesigner
             "7",
             "8",
             "9"});
-            this.comDataBit.Location = new System.Drawing.Point(173, 54);
+            this.comDataBit.Location = new System.Drawing.Point(164, 55);
             this.comDataBit.Name = "comDataBit";
             this.comDataBit.Size = new System.Drawing.Size(57, 20);
             this.comDataBit.TabIndex = 0;
@@ -339,7 +382,7 @@ namespace WinFormDesigner
             this.comBaudRate.Items.AddRange(new object[] {
             "9600",
             "19200"});
-            this.comBaudRate.Location = new System.Drawing.Point(103, 54);
+            this.comBaudRate.Location = new System.Drawing.Point(94, 55);
             this.comBaudRate.Name = "comBaudRate";
             this.comBaudRate.Size = new System.Drawing.Size(57, 20);
             this.comBaudRate.TabIndex = 0;
@@ -348,7 +391,7 @@ namespace WinFormDesigner
             // comPortName
             // 
             this.comPortName.FormattingEnabled = true;
-            this.comPortName.Location = new System.Drawing.Point(25, 54);
+            this.comPortName.Location = new System.Drawing.Point(16, 55);
             this.comPortName.Name = "comPortName";
             this.comPortName.Size = new System.Drawing.Size(57, 20);
             this.comPortName.TabIndex = 0;
@@ -485,6 +528,7 @@ namespace WinFormDesigner
             this.pnlContent.ResumeLayout(false);
             this.tabContent.ResumeLayout(false);
             this.tPCom.ResumeLayout(false);
+            this.tPCom.PerformLayout();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.menuStrip1.ResumeLayout(false);
@@ -536,5 +580,9 @@ namespace WinFormDesigner
         private System.Windows.Forms.ComboBox comBaudRate;
         private System.Windows.Forms.ComboBox comPortName;
         private System.IO.Ports.SerialPort serialPort1;
+        private System.Windows.Forms.Label label10;
+        private System.Windows.Forms.TextBox txtSendCmd;
+        private System.Windows.Forms.TextBox txtReceive;
+        private System.Windows.Forms.Label label9;
     }
 }

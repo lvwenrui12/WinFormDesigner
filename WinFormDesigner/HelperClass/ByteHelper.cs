@@ -8,12 +8,22 @@ namespace HelperClass
 {
   public  class ByteHelper
     {
+        public static byte[] AddMediaPro(byte[] sendByte)
+        {
+            byte lenth0 = Convert.ToByte(((sendByte.Length + 4) / 0x100) & 0xff);
+            byte lenth1 = Convert.ToByte((sendByte.Length + 4) & 0xff); //低位
+
+            byte[] head = {0xAA, lenth0 , lenth1 };
+            byte[] end = {0x55};
+          return  MergerArray(head, sendByte,end);
+        }
+
 
         public static byte[] MergerArray(byte[] First, byte[] Second)
         {
             byte[] result = new byte[First.Length + Second.Length];
             First.CopyTo(result, 0);
-            Second.CopyTo(result, First.Length);
+            Second.CopyTo(result, First.Length); 
             return result;
         }
 

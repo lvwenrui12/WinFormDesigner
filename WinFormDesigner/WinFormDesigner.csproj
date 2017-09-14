@@ -49,6 +49,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Components\Btn.cs" />
+    <Compile Include="Components\IComponent.cs" />
+    <Compile Include="Components\TxtBox.cs" />
     <Compile Include="HelperClass\ByteHelper.cs" />
     <Compile Include="HelperClass\ComponentLibraryLoader.cs" />
     <Compile Include="HelperClass\IDEContainer.cs" />
